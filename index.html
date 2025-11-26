@@ -65,7 +65,7 @@
     header {
       position: sticky;
       top: 0;
-      z-index: 20;
+      z-index: 30;
       backdrop-filter: blur(24px);
       background: linear-gradient(
         to bottom,
@@ -77,7 +77,7 @@
     }
 
     .nav {
-      max-width: 1100px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 0.7rem 1.2rem;
       display: flex;
@@ -163,24 +163,159 @@
       box-shadow: 0 0 12px rgba(0, 255, 157, 0.9);
     }
 
-    main {
-      max-width: 1100px;
+    /* LAYOUT */
+
+    .layout {
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 2.5rem 1.2rem 3.3rem;
+      padding: 2.2rem 1.2rem 3.3rem;
+      display: grid;
+      grid-template-columns: minmax(220px, 260px) minmax(0, 1fr);
+      gap: 2.2rem;
+    }
+
+    aside.sidebar {
+      position: sticky;
+      top: 4.3rem;
+      align-self: flex-start;
+      z-index: 10;
+    }
+
+    .sidebar-panel {
+      border-radius: 18px;
+      background: radial-gradient(circle at top left, #121426 0, #02030a 70%);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 1rem 0.9rem 1.1rem;
+      font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .sidebar-panel::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0 0, rgba(0, 255, 157, 0.12), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(0, 213, 255, 0.14), transparent 60%);
+      opacity: 0.8;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .sidebar-title {
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .sidebar-status {
+      color: var(--accent-alt);
+      font-size: 0.72rem;
+    }
+
+    .tree {
+      margin-top: 0.4rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .tree-root {
+      margin-bottom: 0.4rem;
+      color: var(--text-main);
+    }
+
+    .tree ul {
+      list-style: none;
+      padding-left: 1rem;
+      border-left: 1px dashed rgba(255, 255, 255, 0.08);
+      margin-left: 0.25rem;
+    }
+
+    .tree-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.15rem 0;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .tree-item span.icon {
+      width: 12px;
+      display: inline-block;
+      text-align: center;
+      color: var(--accent-soft);
+    }
+
+    .tree-item span.label {
+      color: var(--text-muted);
+      transition: color 0.15s ease;
+    }
+
+    .tree-item.active span.label {
+      color: var(--accent);
+    }
+
+    .tree-item:hover span.label {
+      color: var(--accent-alt);
+    }
+
+    .tree-folder > ul {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.2s ease;
+    }
+
+    .tree-folder.open > ul {
+      max-height: 300px;
+    }
+
+    .tree-folder > .tree-item span.icon-toggle {
+      transition: transform 0.15s ease;
+    }
+
+    .tree-folder.open > .tree-item span.icon-toggle {
+      transform: rotate(90deg);
+    }
+
+    .tree-footer {
+      margin-top: 0.7rem;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      opacity: 0.8;
+    }
+
+    main {
+      min-width: 0;
     }
 
     section {
-      margin-bottom: 4rem;
+      margin-bottom: 3.5rem;
     }
 
-    /* HERO */
+    /* HERO SECTION */
 
     .hero {
       display: grid;
       grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.2fr);
-      gap: 3rem;
+      gap: 2.4rem;
       align-items: center;
-      padding-top: 1.4rem;
+      padding-top: 0.4rem;
     }
 
     .hero-label {
@@ -540,7 +675,7 @@
       border: 1px solid var(--border);
     }
 
-    /* PROJECTS */
+    /* PROJECTS / OPS */
 
     .project-grid {
       display: grid;
@@ -608,6 +743,82 @@
       text-decoration: underline;
     }
 
+    /* ACHIEVEMENTS / CERTS */
+
+    .achievements-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.4rem;
+    }
+
+    .achievement-card {
+      border-radius: 18px;
+      background: radial-gradient(circle at top, #191932 0, #03040c 70%);
+      border: 1px solid var(--border);
+      padding: 1.1rem 1.1rem 1.2rem;
+      box-shadow: var(--shadow);
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .achievement-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.6rem;
+      align-items: baseline;
+      margin-bottom: 0.3rem;
+    }
+
+    .achievement-title {
+      font-size: 0.96rem;
+      color: var(--text-main);
+    }
+
+    .achievement-badge {
+      font-size: 0.7rem;
+      padding: 0.18rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .achievement-badge.completed {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .achievement-badge.progress {
+      border-color: var(--accent-alt);
+      color: var(--accent-alt);
+      background: rgba(0, 213, 255, 0.08);
+    }
+
+    .achievement-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .achievement-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-top: 0.5rem;
+    }
+
+    .achievement-tags span {
+      font-size: 0.72rem;
+      padding: 0.18rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(3, 4, 14, 0.96);
+      color: var(--text-muted);
+    }
+
     /* CONTACT */
 
     .contact-card {
@@ -643,7 +854,7 @@
     }
 
     footer {
-      max-width: 1100px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 0 1.2rem 2rem;
       font-size: 0.75rem;
@@ -659,11 +870,20 @@
       color: var(--accent);
     }
 
-    @media (max-width: 900px) {
-      .hero,
-      .about-grid,
-      .contact-card {
+    @media (max-width: 1000px) {
+      .layout {
         grid-template-columns: minmax(0, 1fr);
+        gap: 1.8rem;
+      }
+      aside.sidebar {
+        position: static;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 1.7rem;
       }
       .hero-panel {
         order: -1;
@@ -675,9 +895,6 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 0.5rem;
-      }
-      .hero {
-        gap: 1.7rem;
       }
       .hero-actions {
         flex-direction: column;
@@ -702,7 +919,8 @@
       <div class="nav-links">
         <a href="#about">About</a>
         <a href="#skills">Toolkit</a>
-        <a href="#ops">Operations</a>
+        <a href="#ops">Ops</a>
+        <a href="#achievements">Achievements</a>
         <a href="#contact">Contact</a>
         <div class="status-pill">
           <span class="status-dot"></span> Operating in the dark
@@ -711,286 +929,454 @@
     </div>
   </header>
 
-  <main>
-    <!-- HERO -->
-    <section class="hero" id="top">
-      <div>
-        <p class="hero-label">access granted · profile: banjara</p>
-        <h1 class="hero-title">
-          Anonymous <span>Offensive Security</span><br />
-          &amp; Bug Bounty Recon
-        </h1>
-        <p class="hero-subtitle">
-          I move quietly through attack surfaces, mapping what’s exposed,
-          what’s misconfigured, and what should never have been online.<br />
-          All activity is performed in <strong>authorized, controlled environments</strong>,
-          focused on hardening real systems — not breaking the rules.
-        </p>
-
-        <div class="hero-actions">
-          <a href="#ops" class="btn">View Operations</a>
-          <a href="#contact" class="btn btn-outline">Signal Banjara</a>
+  <div class="layout">
+    <!-- SIDEBAR / FOLDER TREE -->
+    <aside class="sidebar">
+      <div class="sidebar-panel">
+        <div class="sidebar-header">
+          <div class="sidebar-title">file system · shadowchat</div>
+          <div class="sidebar-status">MOUNT: /banjara</div>
         </div>
+        <div class="tree" id="tree">
+          <div class="tree-root">/root</div>
+          <ul>
+            <li class="tree-folder open">
+              <div class="tree-item" data-section="top">
+                <span class="icon icon-toggle">▸</span>
+                <span class="label">shadow_profile/</span>
+              </div>
+              <ul>
+                <li>
+                  <div class="tree-item" data-section="about">
+                    <span class="icon">└</span>
+                    <span class="label">about.txt</span>
+                  </div>
+                </li>
+              </ul>
+            </li>
 
-        <div class="hero-meta">
-          <div>
-            <span>Role</span>
-            Shadow Operator · Ethical Hacker
-          </div>
-          <div>
-            <span>Surface</span>
-            Web apps · APIs · Infrastructure
-          </div>
-          <div>
-            <span>Mode</span>
-            No noise · No drama · Just signals
-          </div>
-        </div>
-      </div>
+            <li class="tree-folder open">
+              <div class="tree-item" data-section="skills">
+                <span class="icon icon-toggle">▸</span>
+                <span class="label">toolkit/</span>
+              </div>
+              <ul>
+                <li>
+                  <div class="tree-item" data-section="skills">
+                    <span class="icon">├</span>
+                    <span class="label">recon.md</span>
+                  </div>
+                </li>
+                <li>
+                  <div class="tree-item" data-section="skills">
+                    <span class="icon">└</span>
+                    <span class="label">web_attack_surface.log</span>
+                  </div>
+                </li>
+              </ul>
+            </li>
 
-      <aside class="hero-panel" aria-label="Hacker terminal">
-        <div class="hero-panel-header">
-          <div class="hero-panel-dots">
-            <span></span><span></span><span></span>
-          </div>
-          <div class="hero-panel-status">
-            <span class="hero-panel-status-dot"></span>
-            TRACE: OFF
-          </div>
-        </div>
-        <div class="hero-panel-body">
-          <div class="code-line">
-            <span class="code-lineno">01</span>
-            <span class="code-comment"># shadow profile · banjara</span>
-          </div>
-          <div class="code-line">
-            <span class="code-lineno">02</span>
-            <span class="code-key">operator_id</span> =
-            <span class="glitch-id">"banjara"</span>
-          </div>
-          <div class="code-line">
-            <span class="code-lineno">03</span>
-            <span class="code-key">status</span> =
-            <span class="code-string">"low signal · high impact"</span>
-          </div>
-          <div class="code-line">
-            <span class="code-lineno">04</span>
-            <span class="code-key">specialization</span> = [
-            <span class="code-string">"recon"</span>,
-            <span class="code-string">"web vulns"</span>,
-            <span class="code-string">"attack surface mapping"</span> ]
-          </div>
-          <div class="code-line">
-            <span class="code-lineno">05</span>
-            <span class="code-key">ruleset</span> =
-            <span class="code-string">"authorized targets only · no exceptions"</span>
-          </div>
-          <div class="code-line">
-            <span class="code-lineno">06</span>
-            <span class="code-comment"># objective: break things quietly, then help fix them.</span>
-          </div>
-          <div class="code-line">
-            <span class="code-lineno">07</span>
-            <span class="code-warn">[!] monitoring:</span>
-            <span class="code-string">shadowchat.tech</span>
-          </div>
-        </div>
-      </aside>
-    </section>
+            <li class="tree-folder open">
+              <div class="tree-item" data-section="ops">
+                <span class="icon icon-toggle">▸</span>
+                <span class="label">ops/</span>
+              </div>
+              <ul>
+                <li>
+                  <div class="tree-item" data-section="ops">
+                    <span class="icon">├</span>
+                    <span class="label">shadow_recon.playbook</span>
+                  </div>
+                </li>
+                <li>
+                  <div class="tree-item" data-section="ops">
+                    <span class="icon">└</span>
+                    <span class="label">lab_runs.notes</span>
+                  </div>
+                </li>
+              </ul>
+            </li>
 
-    <!-- ABOUT -->
-    <section id="about">
-      <p class="section-label">About</p>
-      <h2 class="section-title">Who is “Banjara”?</h2>
+            <li class="tree-folder open">
+              <div class="tree-item" data-section="achievements">
+                <span class="icon icon-toggle">▸</span>
+                <span class="label">achievements/</span>
+              </div>
+              <ul>
+                <li>
+                  <div class="tree-item" data-section="achievements">
+                    <span class="icon">├</span>
+                    <span class="label">certs.json</span>
+                  </div>
+                </li>
+                <li>
+                  <div class="tree-item" data-section="achievements">
+                    <span class="icon">└</span>
+                    <span class="label">milestones.log</span>
+                  </div>
+                </li>
+              </ul>
+            </li>
 
-      <div class="about-grid">
-        <div class="about-card">
-          <p>
-            I operate under the handle <strong>Banjara</strong> — a roaming
-            mind focused on offensive security, bug bounty practice, and
-            realistic attack surface analysis.
-          </p>
-          <br />
-          <p>
-            My work lives in the grey zone between how systems are designed
-            to behave and how they behave when pushed. I build repeatable
-            workflows: recon, mapping, probing, and reporting — always
-            executed against <strong>authorized</strong> scopes, labs, and
-            formal bug bounty programs.
-          </p>
-          <br />
-          <p>
-            This portfolio is not about who I am offline. It’s about how I
-            think, how I break things safely, and how I help reduce risk in
-            the systems that run the world.
-          </p>
+            <li>
+              <div class="tree-item" data-section="contact">
+                <span class="icon">▶</span>
+                <span class="label">contact_channel</span>
+              </div>
+            </li>
+          </ul>
         </div>
-        <div class="about-facts">
-          <div class="about-fact">
-            <span>Identity</span>
-            <strong>Alias only · no face</strong>
-          </div>
-          <div class="about-fact">
-            <span>Discipline</span>
-            Methodical, quiet, logged locally
-          </div>
-          <div class="about-fact">
-            <span>Engagements</span>
-            Labs · Bug bounty programs · CTFs
-          </div>
-          <div class="about-fact">
-            <span>Ethics</span>
-            Permission first · disclosure later
-          </div>
+        <div class="tree-footer">
+          click folders<br />
+          → jump to section · all noise filtered
         </div>
       </div>
-    </section>
+    </aside>
 
-    <!-- SKILLS -->
-    <section id="skills">
-      <p class="section-label">Toolkit</p>
-      <h2 class="section-title">What I bring into the dark</h2>
-
-      <div class="pill-row">
-        <span class="pill highlight">Recon & Enumeration</span>
-        <span class="pill">Web application security</span>
-        <span class="pill">Bug bounty methodology</span>
-        <span class="pill">Linux & CLI</span>
-        <span class="pill">Threat thinking</span>
-      </div>
-
-      <div class="skills-grid">
-        <div class="skill-card">
-          <h3>Recon Engine</h3>
-          <p>
-            I map external attack surfaces before touching anything sensitive.
-            From subdomains to forgotten endpoints, the goal is coverage,
-            context, and clean notes — not noise.
+    <main>
+      <!-- HERO -->
+      <section class="hero" id="top">
+        <div>
+          <p class="hero-label">access granted · profile: banjara</p>
+          <h1 class="hero-title">
+            Anonymous <span>Offensive Security</span><br />
+            &amp; Bug Bounty Recon
+          </h1>
+          <p class="hero-subtitle">
+            I move quietly through attack surfaces, mapping what’s exposed,
+            what’s misconfigured, and what should never have been online.<br />
+            All activity is performed in <strong>authorized, controlled environments</strong>,
+            focused on hardening real systems — not breaking the rules.
           </p>
-          <div class="skill-tags">
-            <span>Subdomain discovery</span>
-            <span>Dir brute forcing</span>
-            <span>Parameter hunting</span>
+
+          <div class="hero-actions">
+            <a href="#ops" class="btn">View Operations</a>
+            <a href="#achievements" class="btn btn-outline">View Achievements</a>
+          </div>
+
+          <div class="hero-meta">
+            <div>
+              <span>Name</span>
+              Banjara
+            </div>
+            <div>
+              <span>Age</span>
+              Unknown
+            </div>
+            <div>
+              <span>Location</span>
+              Not found
+            </div>
           </div>
         </div>
-        <div class="skill-card">
-          <h3>Web Layer Abuse (Ethical)</h3>
-          <p>
-            I focus on the issues that actually hurt: auth flaws, access control
-            mistakes, input handling, and logic bugs that sit behind “secure”
-            UI flows.
-          </p>
-          <div class="skill-tags">
-            <span>XSS</span>
-            <span>Auth & sessions</span>
-            <span>IDOR / access control</span>
-            <span>Logic issues</span>
+
+        <aside class="hero-panel" aria-label="Hacker terminal">
+          <div class="hero-panel-header">
+            <div class="hero-panel-dots">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="hero-panel-status">
+              <span class="hero-panel-status-dot"></span>
+              TRACE: OFF
+            </div>
+          </div>
+          <div class="hero-panel-body">
+            <div class="code-line">
+              <span class="code-lineno">01</span>
+              <span class="code-comment"># shadow profile · banjara</span>
+            </div>
+            <div class="code-line">
+              <span class="code-lineno">02</span>
+              <span class="code-key">identity</span> =
+              <span class="glitch-id">"banjara"</span>
+            </div>
+            <div class="code-line">
+              <span class="code-lineno">03</span>
+              <span class="code-key">status</span> =
+              <span class="code-string">"low signal · high impact"</span>
+            </div>
+            <div class="code-line">
+              <span class="code-lineno">04</span>
+              <span class="code-key">visual</span> =
+              <span class="code-string">"image error: sorry, you are not qualified to see"</span>
+            </div>
+            <div class="code-line">
+              <span class="code-lineno">05</span>
+              <span class="code-key">specialization</span> = [
+              <span class="code-string">"recon"</span>,
+              <span class="code-string">"web vulns"</span>,
+              <span class="code-string">"attack surface mapping"</span> ]
+            </div>
+            <div class="code-line">
+              <span class="code-lineno">06</span>
+              <span class="code-key">ruleset</span> =
+              <span class="code-string">"authorized targets only · no exceptions"</span>
+            </div>
+            <div class="code-line">
+              <span class="code-lineno">07</span>
+              <span class="code-warn">[+] monitoring:</span>
+              <span class="code-string">shadowchat.tech</span>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <!-- ABOUT -->
+      <section id="about">
+        <p class="section-label">About</p>
+        <h2 class="section-title">Who is “Banjara”?</h2>
+
+        <div class="about-grid">
+          <div class="about-card">
+            <p>
+              I am <strong>Banjara</strong> — a roaming mind focused on offensive
+              security, bug bounty practice, and realistic attack surface analysis.
+            </p>
+            <br />
+            <p>
+              My work lives in the grey zone between how systems are designed
+              to behave and how they behave when pushed. I build repeatable
+              workflows: recon, mapping, probing, and reporting — always
+              executed against <strong>authorized</strong> scopes, labs, and
+              formal bug bounty programs.
+            </p>
+            <br />
+            <p>
+              This portfolio is not about a real-world profile. It’s about how I
+              think, how I break things safely, and how I help reduce risk in
+              the systems that run the world.
+            </p>
+          </div>
+          <div class="about-facts">
+            <div class="about-fact">
+              <span>Name</span>
+              <strong>Banjara</strong>
+            </div>
+            <div class="about-fact">
+              <span>Age</span>
+              Unknown
+            </div>
+            <div class="about-fact">
+              <span>Location</span>
+              Not found
+            </div>
+            <div class="about-fact">
+              <span>Image</span>
+              error: you are not qualified to see
+            </div>
           </div>
         </div>
-        <div class="skill-card">
-          <h3>Tools & Workflow</h3>
-          <p>
-            I combine graphical tools with CLI utilities and custom notes to
-            keep every run reproducible, documented, and ready to turn into a
-            clean report.
-          </p>
-          <div class="skill-tags">
-            <span>Burp Suite</span>
-            <span>Nmap</span>
-            <span>ffuf</span>
-            <span>bash</span>
-            <span>GitHub</span>
+      </section>
+
+      <!-- SKILLS -->
+      <section id="skills">
+        <p class="section-label">Toolkit</p>
+        <h2 class="section-title">What I bring into the dark</h2>
+
+        <div class="pill-row">
+          <span class="pill highlight">Recon & Enumeration</span>
+          <span class="pill">Web application security</span>
+          <span class="pill">Bug bounty methodology</span>
+          <span class="pill">Linux & CLI</span>
+          <span class="pill">Threat thinking</span>
+        </div>
+
+        <div class="skills-grid">
+          <div class="skill-card">
+            <h3>Recon Engine</h3>
+            <p>
+              I map external attack surfaces before touching anything sensitive.
+              From subdomains to forgotten endpoints, the goal is coverage,
+              context, and clean notes — not noise.
+            </p>
+            <div class="skill-tags">
+              <span>Subdomain discovery</span>
+              <span>Dir brute forcing</span>
+              <span>Parameter hunting</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h3>Web Layer Abuse (Ethical)</h3>
+            <p>
+              I focus on the issues that actually hurt: auth flaws, access control
+              mistakes, input handling, and logic bugs that sit behind “secure”
+              UI flows.
+            </p>
+            <div class="skill-tags">
+              <span>XSS</span>
+              <span>Auth & sessions</span>
+              <span>IDOR / access control</span>
+              <span>Logic issues</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h3>Tools & Workflow</h3>
+            <p>
+              I combine graphical tools with CLI utilities and custom notes to
+              keep every run reproducible, documented, and ready to turn into a
+              clean report.
+            </p>
+            <div class="skill-tags">
+              <span>Burp Suite</span>
+              <span>Nmap</span>
+              <span>ffuf</span>
+              <span>bash</span>
+              <span>GitHub</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h3>Reporting</h3>
+            <p>
+              Finding the bug is half the job. I practice writing reports that
+              explain what happened, why it matters, and how to make sure it
+              doesn’t happen again.
+            </p>
+            <div class="skill-tags">
+              <span>Structured write-ups</span>
+              <span>Impact-focused</span>
+              <span>Repro steps</span>
+            </div>
           </div>
         </div>
-        <div class="skill-card">
-          <h3>Reporting</h3>
-          <p>
-            Finding the bug is half the job. I practice writing reports that
-            explain what happened, why it matters, and how to make sure it
-            doesn’t happen again.
-          </p>
-          <div class="skill-tags">
-            <span>Structured write-ups</span>
-            <span>Impact-focused</span>
-            <span>Repro steps</span>
+      </section>
+
+      <!-- OPERATIONS / PROJECTS -->
+      <section id="ops">
+        <p class="section-label">Operations</p>
+        <h2 class="section-title">Signals from the field</h2>
+
+        <div class="project-grid">
+          <article class="project-card">
+            <h3>Shadow Recon Playbook</h3>
+            <div class="project-meta">Recon · Methodology</div>
+            <p>
+              A living checklist-driven workflow for approaching new targets:
+              from DNS and subdomains to tech stack fingerprinting and
+              endpoint mapping. Built around quiet, consistent discovery.
+            </p>
+            <div class="project-links">
+              <a href="#" target="_blank" rel="noreferrer">Public snapshot · soon</a>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <h3>Web Exploitation Labs</h3>
+            <div class="project-meta">Training · Labs</div>
+            <p>
+              Hands-on practice against intentionally vulnerable apps and
+              platform labs, focusing on chaining simple misconfigurations into
+              meaningful impact — always in safe, controlled environments.
+            </p>
+            <div class="project-links">
+              <a href="#" target="_blank" rel="noreferrer">Lab notes · private</a>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <h3>Shadowchat Concept</h3>
+            <div class="project-meta">Privacy · E2E Ideas</div>
+            <p>
+              Conceptual design for a zero-log, end-to-end encrypted chat
+              platform focused on anonymity, minimal metadata, and honest
+              security limitations. Built with the mindset of “no unnecessary
+              trust”.
+            </p>
+            <div class="project-links">
+              <a href="https://github.com/f1f25mmat0037-eng" target="_blank" rel="noreferrer">
+                GitHub profile
+              </a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ACHIEVEMENTS / CERTS -->
+      <section id="achievements">
+        <p class="section-label">Achievements</p>
+        <h2 class="section-title">Certs, labs & milestones</h2>
+
+        <div class="achievements-grid">
+          <article class="achievement-card">
+            <div class="achievement-header">
+              <div class="achievement-title">Offensive Security Certified Professional (OSCP)</div>
+              <div class="achievement-badge progress">In Progress / Target</div>
+            </div>
+            <div class="achievement-meta">
+              Deep-dive exam focusing on realistic network penetration testing,
+              pivoting, privilege escalation and documentation discipline.
+            </div>
+            <p>
+              Building foundations through labs, buffer overflow basics, Linux/Windows
+              privilege escalation, and note-taking geared toward OSCP-style reporting.
+            </p>
+            <div class="achievement-tags">
+              <span>Offensive Security</span>
+              <span>Exam discipline</span>
+              <span>PrivEsc</span>
+            </div>
+          </article>
+
+          <article class="achievement-card">
+            <div class="achievement-header">
+              <div class="achievement-title">Web Security Labs & Platforms</div>
+              <div class="achievement-badge completed">Active</div>
+            </div>
+            <div class="achievement-meta">
+              Consistent practice on structured web security labs and platforms.
+            </div>
+            <p>
+              Regularly working through web security challenges to sharpen skills around
+              XSS, auth flows, access control, and logic issues — always inside
+              intentionally vulnerable environments.
+            </p>
+            <div class="achievement-tags">
+              <span>Lab time</span>
+              <span>Hands-on</span>
+              <span>Web vulns</span>
+            </div>
+          </article>
+
+          <article class="achievement-card">
+            <div class="achievement-header">
+              <div class="achievement-title">Bug Bounty Methodology</div>
+              <div class="achievement-badge completed">Ongoing</div>
+            </div>
+            <div class="achievement-meta">
+              Personal playbook for approaching real-world programs with discipline.
+            </div>
+            <p>
+              Designing and refining a repeatable flow: target intake, recon,
+              prioritization, safe testing, local logging, and report preparation focused
+              on impact and clarity for program owners.
+            </p>
+            <div class="achievement-tags">
+              <span>Process</span>
+              <span>Checklists</span>
+              <span>Reporting</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section id="contact">
+        <p class="section-label">Contact</p>
+        <h2 class="section-title">Send a signal</h2>
+
+        <div class="contact-card">
+          <div class="contact-text">
+            If you’re working on something that needs a careful, methodical look
+            from an attacker’s point of view — within an authorized and ethical
+            scope — you can reach out through this channel.
+          </div>
+          <div class="contact-list">
+            <div><strong>GitHub:</strong> <code>github.com/f1f25mmat0037-eng</code></div>
+            <div><strong>Email:</strong> <code>banjara@shadowchat.tech</code></div>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- OPERATIONS / PROJECTS -->
-    <section id="ops">
-      <p class="section-label">Operations</p>
-      <h2 class="section-title">Signals from the field</h2>
-
-      <div class="project-grid">
-        <article class="project-card">
-          <h3>Shadow Recon Playbook</h3>
-          <div class="project-meta">Recon · Methodology</div>
-          <p>
-            A living checklist-driven workflow for approaching new targets:
-            from DNS and subdomains to tech stack fingerprinting and
-            endpoint mapping. Built around quiet, consistent discovery.
-          </p>
-          <div class="project-links">
-            <a href="#" target="_blank" rel="noreferrer">Public snapshot · soon</a>
-          </div>
-        </article>
-
-        <article class="project-card">
-          <h3>Web Exploitation Labs</h3>
-          <div class="project-meta">Training · Labs</div>
-          <p>
-            Hands-on practice against intentionally vulnerable apps and
-            platform labs, focusing on chaining simple misconfigurations into
-            meaningful impact — always in safe, controlled environments.
-          </p>
-          <div class="project-links">
-            <a href="#" target="_blank" rel="noreferrer">Lab notes · private</a>
-          </div>
-        </article>
-
-        <article class="project-card">
-          <h3>Shadowchat Concept</h3>
-          <div class="project-meta">Privacy · E2E Ideas</div>
-          <p>
-            Conceptual design for a zero-log, end-to-end encrypted chat
-            platform focused on anonymity, minimal metadata, and honest
-            security limitations. Built with the mindset of “no unnecessary
-            trust”.
-          </p>
-          <div class="project-links">
-            <a href="https://github.com/f1f25mmat0037-eng" target="_blank" rel="noreferrer">
-              GitHub profile
-            </a>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact">
-      <p class="section-label">Contact</p>
-      <h2 class="section-title">Send a signal</h2>
-
-      <div class="contact-card">
-        <div class="contact-text">
-          No real names, no unnecessary details. If you’re working on something
-          that needs a careful, methodical look from an attacker’s point of
-          view — within an authorized and ethical scope — you can reach out
-          through a channel you control.
-          <br /><br />
-          Replace the placeholder handle below with your own secure contact
-          method (for example, an alias email or other private channel).
-        </div>
-        <div class="contact-list">
-          <div><strong>GitHub:</strong> <code>github.com/f1f25mmat0037-eng</code></div>
-          <div><strong>Primary Alias:</strong> <code>@banjara</code></div>
-          <div><strong>Secure contact (placeholder):</strong> <code>your-alias@proton.me</code></div>
-        </div>
-      </div>
-    </section>
-  </main>
+      </section>
+    </main>
+  </div>
 
   <footer>
     <div>© <span id="year"></span> BANJARA · shadow operator</div>
@@ -999,6 +1385,44 @@
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
+
+    // folder tree behavior + smooth scroll
+    const tree = document.getElementById("tree");
+    const items = tree.querySelectorAll(".tree-item[data-section]");
+
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const offset = window.scrollY + rect.top - 80; // header offset
+      window.scrollTo({ top: offset, behavior: "smooth" });
+    }
+
+    items.forEach(item => {
+      item.addEventListener("click", () => {
+        const sectionId = item.getAttribute("data-section");
+        if (sectionId) {
+          scrollToSection(sectionId);
+        }
+        items.forEach(i => i.classList.remove("active"));
+        item.classList.add("active");
+
+        const parent = item.parentElement.parentElement;
+        if (parent.classList.contains("tree-folder")) {
+          parent.classList.add("open");
+        }
+      });
+    });
+
+    const folders = tree.querySelectorAll(".tree-folder > .tree-item");
+    folders.forEach(folderItem => {
+      folderItem.addEventListener("click", (e) => {
+        const parent = folderItem.parentElement;
+        if (parent.classList.contains("tree-folder")) {
+          parent.classList.toggle("open");
+        }
+      });
+    });
   </script>
 </body>
 </html>
