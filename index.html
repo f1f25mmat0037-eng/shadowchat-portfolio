@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Banjara | Shadow Operator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Anonymous offensive security & ethical hacking portfolio." />
+  <style>
+    :root {
+      --bg: #02030a;
+      --bg-alt: #050814;
+      --accent: #00ff9d;
+      --accent-alt: #00d5ff;
+      --accent-soft: rgba(0, 255, 157, 0.1);
+      --danger: #ff2b6b;
+      --text-main: #f5f5f5;
+      --text-muted: #8080a0;
+      --border: rgba(255, 255, 255, 0.08);
+      --radius: 18px;
+      --shadow: 0 18px 45px rgba(0, 0, 0, 0.85);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #101632 0, #02030a 40%, #000 100%);
+      color: var(--text-main);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.12;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='noStitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+      z-index: -1;
+      mix-blend-mode: soft-light;
+    }
+
+    .scanline {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.4) 0px,
+        rgba(0, 0, 0, 0.4) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      opacity: 0.35;
+      z-index: -1;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(24px);
+      background: linear-gradient(
+        to bottom,
+        rgba(2, 3, 10, 0.96),
+        rgba(2, 3, 10, 0.82),
+        transparent
+      );
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .nav {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0.7rem 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      font-size: 0.85rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .logo-tag {
+      font-size: 0.78rem;
+      padding: 0.12rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 255, 157, 0.4);
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+
+    .logo span {
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.4rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      position: relative;
+      padding-bottom: 0.1rem;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus {
+      color: var(--accent);
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 0;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.18s ease;
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a:focus::after {
+      width: 100%;
+    }
+
+    .status-pill {
+      border-radius: 999px;
+      padding: 0.25rem 0.7rem;
+      border: 1px solid var(--border);
+      background: radial-gradient(circle at top, #17173a 0, #050712 70%);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 12px rgba(0, 255, 157, 0.9);
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem 1.2rem 3.3rem;
+    }
+
+    section {
+      margin-bottom: 4rem;
+    }
+
+    /* HERO */
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 3.1fr) minmax(0, 2.2fr);
+      gap: 3rem;
+      align-items: center;
+      padding-top: 1.4rem;
+    }
+
+    .hero-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--danger);
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-title {
+      font-size: clamp(2.5rem, 2.8vw + 1.8rem, 3.4rem);
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-title span {
+      color: var(--accent);
+      text-shadow:
+        0 0 10px rgba(0, 255, 157, 0.7),
+        0 0 35px rgba(0, 255, 157, 0.3);
+    }
+
+    .hero-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      max-width: 36rem;
+      margin-bottom: 1.6rem;
+    }
+
+    .hero-subtitle strong {
+      color: var(--accent-alt);
+      font-weight: 500;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      margin-bottom: 1.3rem;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 0.55rem 1.4rem;
+      border: 1px solid var(--border);
+      background: radial-gradient(circle at top left, #1d1f45 0, #060713 70%);
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 0.85rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      transition:
+        transform 0.12s ease,
+        box-shadow 0.12s ease,
+        border-color 0.12s ease,
+        background 0.12s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 22px 45px rgba(0, 0, 0, 0.9);
+      border-color: var(--accent);
+      background: radial-gradient(circle at top left, #262b58 0, #050712 75%);
+    }
+
+    .btn-outline {
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .btn-outline:hover {
+      background: var(--accent-soft);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.3rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .hero-meta div span {
+      display: block;
+      color: var(--text-main);
+      font-weight: 600;
+      margin-bottom: 0.08rem;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .hero-panel {
+      position: relative;
+      border-radius: var(--radius);
+      background: radial-gradient(circle at top, #121426 0, #03040c 70%);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 1.4rem 1.2rem;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .hero-panel::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0 0, rgba(0, 255, 157, 0.14), transparent 55%),
+        radial-gradient(circle at 100% 100%, rgba(0, 213, 255, 0.16), transparent 60%);
+      opacity: 0.85;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    .hero-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      position: relative;
+      z-index: 1;
+      margin-bottom: 0.9rem;
+    }
+
+    .hero-panel-dots {
+      display: flex;
+      gap: 0.35rem;
+    }
+
+    .hero-panel-dots span {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #2a2a4d;
+    }
+
+    .hero-panel-dots span:nth-child(1) {
+      background: #ff5f57;
+    }
+
+    .hero-panel-dots span:nth-child(2) {
+      background: #febc2e;
+    }
+
+    .hero-panel-dots span:nth-child(3) {
+      background: #28c941;
+    }
+
+    .hero-panel-status {
+      font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .hero-panel-status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--danger);
+      box-shadow: 0 0 10px rgba(255, 43, 107, 0.95);
+    }
+
+    .hero-panel-body {
+      position: relative;
+      z-index: 1;
+      border-radius: calc(var(--radius) - 6px);
+      background: rgba(0, 0, 0, 0.32);
+      border: 1px solid rgba(0, 0, 0, 0.7);
+      padding: 1.1rem 1rem;
+      font-family: "SF Mono", ui-monospace, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      font-size: 0.78rem;
+      color: #c4f5ff;
+      overflow: hidden;
+    }
+
+    .code-line {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .code-lineno {
+      opacity: 0.4;
+      margin-right: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .code-key {
+      color: #8be9fd;
+    }
+
+    .code-string {
+      color: #50fa7b;
+    }
+
+    .code-comment {
+      color: #6272a4;
+      font-style: italic;
+    }
+
+    .code-warn {
+      color: var(--danger);
+    }
+
+    .glitch-id {
+      display: inline-block;
+      position: relative;
+      color: var(--accent);
+      text-shadow:
+        -1px 0 var(--accent-alt),
+        1px 0 var(--danger);
+      animation: glitch 1.8s infinite;
+    }
+
+    @keyframes glitch {
+      0% { transform: translate(0); }
+      20% { transform: translate(-1px, 1px); }
+      40% { transform: translate(1px, -1px); }
+      60% { transform: translate(-1px, -1px); }
+      80% { transform: translate(1px, 1px); }
+      100% { transform: translate(0); }
+    }
+
+    /* SECTION STYLES */
+
+    .section-label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--text-muted);
+      margin-bottom: 0.3rem;
+    }
+
+    .section-title {
+      font-size: 1.45rem;
+      margin-bottom: 0.9rem;
+    }
+
+    /* ABOUT */
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.2fr);
+      gap: 2rem;
+    }
+
+    .about-card {
+      border-radius: var(--radius);
+      background: radial-gradient(circle at top left, #161633 0, #040510 70%);
+      border: 1px solid var(--border);
+      padding: 1.4rem 1.3rem;
+      box-shadow: var(--shadow);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .about-facts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .about-fact {
+      padding: 0.9rem 0.95rem;
+      border-radius: 16px;
+      background: rgba(3, 4, 14, 0.96);
+      border: 1px solid var(--border);
+    }
+
+    .about-fact span {
+      display: block;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+      margin-bottom: 0.28rem;
+    }
+
+    .about-fact strong {
+      font-size: 0.9rem;
+      color: var(--accent);
+    }
+
+    /* SKILLS */
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 1.3rem;
+    }
+
+    .pill {
+      font-size: 0.78rem;
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(3, 4, 14, 0.96);
+      color: var(--text-muted);
+    }
+
+    .pill.highlight {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .skill-card {
+      border-radius: 16px;
+      background: rgba(4, 5, 18, 0.98);
+      border: 1px solid var(--border);
+      padding: 1rem;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      box-shadow: var(--shadow);
+    }
+
+    .skill-card h3 {
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-main);
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-top: 0.55rem;
+    }
+
+    .skill-tags span {
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(11, 11, 40, 0.94);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    /* PROJECTS */
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.4rem;
+    }
+
+    .project-card {
+      border-radius: 18px;
+      background: radial-gradient(circle at top, #171733 0, #03040c 70%);
+      border: 1px solid var(--border);
+      padding: 1.2rem;
+      box-shadow: var(--shadow);
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        135deg,
+        rgba(0, 255, 157, 0.05),
+        transparent,
+        rgba(0, 213, 255, 0.06)
+      );
+      mix-blend-mode: soft-light;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    .project-card h3 {
+      font-size: 0.98rem;
+      margin-bottom: 0.3rem;
+      color: var(--text-main);
+    }
+
+    .project-meta {
+      font-size: 0.76rem;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .project-links {
+      margin-top: 0.7rem;
+      display: flex;
+      gap: 0.7rem;
+      flex-wrap: wrap;
+    }
+
+    .project-links a {
+      font-size: 0.78rem;
+      color: var(--accent);
+      text-decoration: none;
+      opacity: 0.9;
+    }
+
+    .project-links a:hover {
+      opacity: 1;
+      text-decoration: underline;
+    }
+
+    /* CONTACT */
+
+    .contact-card {
+      border-radius: 18px;
+      background: radial-gradient(circle at top, #181833 0, #02030a 70%);
+      border: 1px solid var(--border);
+      padding: 1.4rem 1.3rem;
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2.1fr);
+      gap: 1.4rem;
+      align-items: center;
+      box-shadow: var(--shadow);
+    }
+
+    .contact-text {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+
+    .contact-list {
+      font-size: 0.82rem;
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .contact-list code {
+      font-size: 0.78rem;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 0.2rem 0.45rem;
+      border-radius: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--accent-alt);
+    }
+
+    footer {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.2rem 2rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 0.9rem;
+    }
+
+    footer span {
+      color: var(--accent);
+    }
+
+    @media (max-width: 900px) {
+      .hero,
+      .about-grid,
+      .contact-card {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .hero-panel {
+        order: -1;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+      .hero {
+        gap: 1.7rem;
+      }
+      .hero-actions {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      footer {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="scanline"></div>
+
+  <header>
+    <div class="nav">
+      <div class="logo">
+        <span>&gt;_</span> BANJARA
+        <div class="logo-tag">shadow unit</div>
+      </div>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#skills">Toolkit</a>
+        <a href="#ops">Operations</a>
+        <a href="#contact">Contact</a>
+        <div class="status-pill">
+          <span class="status-dot"></span> Operating in the dark
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div>
+        <p class="hero-label">access granted · profile: banjara</p>
+        <h1 class="hero-title">
+          Anonymous <span>Offensive Security</span><br />
+          &amp; Bug Bounty Recon
+        </h1>
+        <p class="hero-subtitle">
+          I move quietly through attack surfaces, mapping what’s exposed,
+          what’s misconfigured, and what should never have been online.<br />
+          All activity is performed in <strong>authorized, controlled environments</strong>,
+          focused on hardening real systems — not breaking the rules.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#ops" class="btn">View Operations</a>
+          <a href="#contact" class="btn btn-outline">Signal Banjara</a>
+        </div>
+
+        <div class="hero-meta">
+          <div>
+            <span>Role</span>
+            Shadow Operator · Ethical Hacker
+          </div>
+          <div>
+            <span>Surface</span>
+            Web apps · APIs · Infrastructure
+          </div>
+          <div>
+            <span>Mode</span>
+            No noise · No drama · Just signals
+          </div>
+        </div>
+      </div>
+
+      <aside class="hero-panel" aria-label="Hacker terminal">
+        <div class="hero-panel-header">
+          <div class="hero-panel-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <div class="hero-panel-status">
+            <span class="hero-panel-status-dot"></span>
+            TRACE: OFF
+          </div>
+        </div>
+        <div class="hero-panel-body">
+          <div class="code-line">
+            <span class="code-lineno">01</span>
+            <span class="code-comment"># shadow profile · banjara</span>
+          </div>
+          <div class="code-line">
+            <span class="code-lineno">02</span>
+            <span class="code-key">operator_id</span> =
+            <span class="glitch-id">"banjara"</span>
+          </div>
+          <div class="code-line">
+            <span class="code-lineno">03</span>
+            <span class="code-key">status</span> =
+            <span class="code-string">"low signal · high impact"</span>
+          </div>
+          <div class="code-line">
+            <span class="code-lineno">04</span>
+            <span class="code-key">specialization</span> = [
+            <span class="code-string">"recon"</span>,
+            <span class="code-string">"web vulns"</span>,
+            <span class="code-string">"attack surface mapping"</span> ]
+          </div>
+          <div class="code-line">
+            <span class="code-lineno">05</span>
+            <span class="code-key">ruleset</span> =
+            <span class="code-string">"authorized targets only · no exceptions"</span>
+          </div>
+          <div class="code-line">
+            <span class="code-lineno">06</span>
+            <span class="code-comment"># objective: break things quietly, then help fix them.</span>
+          </div>
+          <div class="code-line">
+            <span class="code-lineno">07</span>
+            <span class="code-warn">[!] monitoring:</span>
+            <span class="code-string">shadowchat.tech</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <p class="section-label">About</p>
+      <h2 class="section-title">Who is “Banjara”?</h2>
+
+      <div class="about-grid">
+        <div class="about-card">
+          <p>
+            I operate under the handle <strong>Banjara</strong> — a roaming
+            mind focused on offensive security, bug bounty practice, and
+            realistic attack surface analysis.
+          </p>
+          <br />
+          <p>
+            My work lives in the grey zone between how systems are designed
+            to behave and how they behave when pushed. I build repeatable
+            workflows: recon, mapping, probing, and reporting — always
+            executed against <strong>authorized</strong> scopes, labs, and
+            formal bug bounty programs.
+          </p>
+          <br />
+          <p>
+            This portfolio is not about who I am offline. It’s about how I
+            think, how I break things safely, and how I help reduce risk in
+            the systems that run the world.
+          </p>
+        </div>
+        <div class="about-facts">
+          <div class="about-fact">
+            <span>Identity</span>
+            <strong>Alias only · no face</strong>
+          </div>
+          <div class="about-fact">
+            <span>Discipline</span>
+            Methodical, quiet, logged locally
+          </div>
+          <div class="about-fact">
+            <span>Engagements</span>
+            Labs · Bug bounty programs · CTFs
+          </div>
+          <div class="about-fact">
+            <span>Ethics</span>
+            Permission first · disclosure later
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills">
+      <p class="section-label">Toolkit</p>
+      <h2 class="section-title">What I bring into the dark</h2>
+
+      <div class="pill-row">
+        <span class="pill highlight">Recon & Enumeration</span>
+        <span class="pill">Web application security</span>
+        <span class="pill">Bug bounty methodology</span>
+        <span class="pill">Linux & CLI</span>
+        <span class="pill">Threat thinking</span>
+      </div>
+
+      <div class="skills-grid">
+        <div class="skill-card">
+          <h3>Recon Engine</h3>
+          <p>
+            I map external attack surfaces before touching anything sensitive.
+            From subdomains to forgotten endpoints, the goal is coverage,
+            context, and clean notes — not noise.
+          </p>
+          <div class="skill-tags">
+            <span>Subdomain discovery</span>
+            <span>Dir brute forcing</span>
+            <span>Parameter hunting</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <h3>Web Layer Abuse (Ethical)</h3>
+          <p>
+            I focus on the issues that actually hurt: auth flaws, access control
+            mistakes, input handling, and logic bugs that sit behind “secure”
+            UI flows.
+          </p>
+          <div class="skill-tags">
+            <span>XSS</span>
+            <span>Auth & sessions</span>
+            <span>IDOR / access control</span>
+            <span>Logic issues</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <h3>Tools & Workflow</h3>
+          <p>
+            I combine graphical tools with CLI utilities and custom notes to
+            keep every run reproducible, documented, and ready to turn into a
+            clean report.
+          </p>
+          <div class="skill-tags">
+            <span>Burp Suite</span>
+            <span>Nmap</span>
+            <span>ffuf</span>
+            <span>bash</span>
+            <span>GitHub</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <h3>Reporting</h3>
+          <p>
+            Finding the bug is half the job. I practice writing reports that
+            explain what happened, why it matters, and how to make sure it
+            doesn’t happen again.
+          </p>
+          <div class="skill-tags">
+            <span>Structured write-ups</span>
+            <span>Impact-focused</span>
+            <span>Repro steps</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OPERATIONS / PROJECTS -->
+    <section id="ops">
+      <p class="section-label">Operations</p>
+      <h2 class="section-title">Signals from the field</h2>
+
+      <div class="project-grid">
+        <article class="project-card">
+          <h3>Shadow Recon Playbook</h3>
+          <div class="project-meta">Recon · Methodology</div>
+          <p>
+            A living checklist-driven workflow for approaching new targets:
+            from DNS and subdomains to tech stack fingerprinting and
+            endpoint mapping. Built around quiet, consistent discovery.
+          </p>
+          <div class="project-links">
+            <a href="#" target="_blank" rel="noreferrer">Public snapshot · soon</a>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <h3>Web Exploitation Labs</h3>
+          <div class="project-meta">Training · Labs</div>
+          <p>
+            Hands-on practice against intentionally vulnerable apps and
+            platform labs, focusing on chaining simple misconfigurations into
+            meaningful impact — always in safe, controlled environments.
+          </p>
+          <div class="project-links">
+            <a href="#" target="_blank" rel="noreferrer">Lab notes · private</a>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <h3>Shadowchat Concept</h3>
+          <div class="project-meta">Privacy · E2E Ideas</div>
+          <p>
+            Conceptual design for a zero-log, end-to-end encrypted chat
+            platform focused on anonymity, minimal metadata, and honest
+            security limitations. Built with the mindset of “no unnecessary
+            trust”.
+          </p>
+          <div class="project-links">
+            <a href="https://github.com/f1f25mmat0037-eng" target="_blank" rel="noreferrer">
+              GitHub profile
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <p class="section-label">Contact</p>
+      <h2 class="section-title">Send a signal</h2>
+
+      <div class="contact-card">
+        <div class="contact-text">
+          No real names, no unnecessary details. If you’re working on something
+          that needs a careful, methodical look from an attacker’s point of
+          view — within an authorized and ethical scope — you can reach out
+          through a channel you control.
+          <br /><br />
+          Replace the placeholder handle below with your own secure contact
+          method (for example, an alias email or other private channel).
+        </div>
+        <div class="contact-list">
+          <div><strong>GitHub:</strong> <code>github.com/f1f25mmat0037-eng</code></div>
+          <div><strong>Primary Alias:</strong> <code>@banjara</code></div>
+          <div><strong>Secure contact (placeholder):</strong> <code>your-alias@proton.me</code></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>© <span id="year"></span> BANJARA · shadow operator</div>
+    <div>Everything here lives in the dark theme by design.</div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
